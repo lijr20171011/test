@@ -72,3 +72,23 @@ func _info(step int, msg string) {
 	_, file := path.Split(filePath)
 	fmt.Println(now + " " + "[" + file + ":" + strconv.Itoa(line) + "]" + msg)
 }
+
+// defer utils.GetFuncRunTime(time.Now())
+// 获取运行的方法及运行时间
+func GetFuncRunTime(t time.Time) (funcName, runTime string) {
+	msg := ""
+	now := time.Now().Format("2006-01-02 15:04:05")
+	pc, filePath, line, ok := runtime.Caller(1)
+	if !ok {
+		filePath = "????"
+		line = 0
+		msg = "获取执行时间信息异常"
+	}
+	//获取文件名
+	_, file := path.Split(filePath)
+	if msg == "" {
+		msg = "方法名: " + runtime.FuncForPC(pc).Name() + "\t" + "运行时间: " + time.Since(t).String()
+	}
+	fmt.Println(now + " " + "[" + file + ":" + strconv.Itoa(line) + "]" + msg)
+	return
+}

@@ -14,7 +14,7 @@ func MyClientTest() {
 	if utils.IsErr(err, "dialing:") {
 		return
 	}
-	args := &models.Args{7, 8}
+	args := &models.Args{7, 0}
 	// 同步调用
 	// reply := 0
 	// err = myClient.Call("Arith.Multiply", args, &reply)
@@ -29,4 +29,5 @@ func MyClientTest() {
 	replyCall := <-divCall.Done
 	utils.Info(replyCall.Args)
 	utils.Info(replyCall.Reply)
+	utils.Info(replyCall.Error)
 }

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"net"
 	"net/http"
 	"net/rpc"
@@ -21,6 +22,9 @@ func (t *Arith) Multiply(args *models.Args, reply *int) (err error) {
 
 // 除法
 func (t *Arith) Divide(args *models.Args, reply *models.Quotient) (err error) {
+	if args.B == 0 {
+		return errors.New("divide by zero")
+	}
 	reply.Quo = args.A / args.B
 	reply.Rem = args.A % args.B
 	return

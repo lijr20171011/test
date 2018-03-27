@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"errors"
 	"os"
+	"reflect"
 	"strings"
 )
 
@@ -23,4 +25,27 @@ func UnderlineToUperCase(str string) string {
 		s += string(r)
 	}
 	return s
+}
+
+// 根据方法名调用方法 测试
+// funcs := map[string]interface{}{"foo": foo, "bar": bar}
+// call(funcs, "foo")
+// call(funcs, "bar", 1, 2, 3)
+func Call(m map[string]interface{}, funcName string, params ...interface{}) (err error) {
+	f := reflect.ValueOf(m[funcName])
+	if f.Type().Kind().String() == "func" {
+		num := f.Type().NumIn()
+		Info(num, len(params))
+		if num != len(params) {
+			return errors.New("参数数量不匹配")
+		}
+		in := make([]reflect.Value, num)
+		for i, v := range params {
+			in[i] = reflect.ValueOf(v)
+		}
+		f.Call(in)
+	} else {
+		return errors.New("不是方法,调用失败")
+	}
+	return
 }
